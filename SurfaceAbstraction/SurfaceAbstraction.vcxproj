@@ -92,7 +92,7 @@
       <AdditionalOptions>/bigobj /await /std:c++latest  %(AdditionalOptions)</AdditionalOptions>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
-      <CompileAsWinRT>false</CompileAsWinRT>
+      <CompileAsWinRT>true</CompileAsWinRT>
       <CompileAsManaged>false</CompileAsManaged>
     </ClCompile>
   </ItemDefinitionGroup>
@@ -160,6 +160,7 @@
     <Image Include="Assets\Wide310x150Logo.scale-200.png" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Abstraction.h" />
     <ClInclude Include="AppView.h" />
     <ClInclude Include="SurfaceAbstractionMain.h" />
     <ClInclude Include="Common\DeviceResources.h" />
@@ -170,8 +171,10 @@
     <ClInclude Include="Content\ShaderStructures.h" />
     <ClInclude Include="Content\SpinningCubeRenderer.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="SurfaceRender.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Abstraction.cpp" />
     <ClCompile Include="AppView.cpp" />
     <ClCompile Include="SurfaceAbstractionMain.cpp" />
     <ClCompile Include="Common\DeviceResources.cpp" />
@@ -181,6 +184,7 @@
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="SurfaceRender.cpp" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

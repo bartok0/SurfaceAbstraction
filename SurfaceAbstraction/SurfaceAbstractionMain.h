@@ -8,10 +8,14 @@
 //     * Remove the unused code from your app's Main class.
 //     * Delete the Content folder provided with this template.
 //
-#define DRAW_SAMPLE_CONTENT
+//#define DRAW_SAMPLE_CONTENT
 
 #include "Common\DeviceResources.h"
 #include "Common\StepTimer.h"
+
+//---
+#include "Abstraction.h"
+//---
 
 #ifdef DRAW_SAMPLE_CONTENT
 #include "Content\SpinningCubeRenderer.h"
@@ -129,5 +133,17 @@ namespace SurfaceAbstraction
 
         // Cache whether or not the HolographicCameraRenderingParameters.CommitDirect3D11DepthBuffer() method can be called.
         bool                                                        m_canCommitDirect3D11DepthBuffer = false;
+
+		//---
+		//Surface abstraction interface:
+		Abstraction												    absInterface;
+
+		//memebers for init/checking/doing vertex access
+		winrt::Windows::Perception::Spatial::Surfaces::SpatialSurfaceObserver*		surfaceObserver = nullptr;
+		winrt::Windows::Perception::Spatial::Surfaces::SpatialSurfaceMeshOptions*	surfaceOptions = nullptr;
+
+		bool surfaceAccessAllowed;
+		bool surfaceAccessRequested;
+		//---
     };
 }

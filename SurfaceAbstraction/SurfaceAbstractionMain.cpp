@@ -15,6 +15,11 @@ using namespace winrt::Windows::Graphics::DirectX::Direct3D11;
 using namespace winrt::Windows::Perception::Spatial;
 using namespace winrt::Windows::UI::Input::Spatial;
 
+//---
+using namespace winrt::Windows::Foundation::Collections;
+using namespace winrt::Windows::Graphics::DirectX;
+//---
+
 // Loads and initializes application assets when the application is loaded.
 SurfaceAbstractionMain::SurfaceAbstractionMain(std::shared_ptr<DX::DeviceResources> const& deviceResources) :
     m_deviceResources(deviceResources)
@@ -55,6 +60,12 @@ void SurfaceAbstractionMain::SetHolographicSpace(HolographicSpace const& hologra
     //
     // TODO: Add code here to initialize your holographic content.
     //
+	//---
+	//Initialize abstraction interface
+	OutputDebugString(L"\n\nInitializing surface abstraction...\n\n");
+	absInterface = Abstraction();
+	//---
+
 
 #ifdef DRAW_SAMPLE_CONTENT
     // Initialize the sample hologram.
@@ -139,6 +150,57 @@ HolographicFrame SurfaceAbstractionMain::Update()
     // Back buffers can change from frame to frame. Validate each buffer, and recreate
     // resource views and depth buffers as needed.
     m_deviceResources->EnsureCameraResources(holographicFrame, prediction);
+
+	//---
+	winrt::Windows::Perception::Spatial::SpatialCoordinateSystem currentCoordinateSystem = m_stationaryReferenceFrame.CoordinateSystem();
+
+	//use tryasynccompute to get raw surface data and store in rawvertices
+	if (surfaceObserver == nullptr) {
+		if (!surfaceAccessRequested) {
+			auto initObserverTask = concurrency::create_task(winrt::Windows::Perception::Spatial::Surfaces::SpatialSurfaceObserver::RequestAccessAsync());
+			initObserverTask.then([this, currentCoordinateSystem](winrt::Windows::Perception::Spatial::SpatialPerceptionAccessStatus status) {
+				switch (status)
+				{
+				case winrt::Windows::Perception::Spatial::SpatialPerceptionAccessStatus::Allowed:
+					surfaceAccessAllowed = true;
+					break;
+				default:
+					surfaceAccessAllowed = false;
+					break;
+				}
+			});
+			surfaceAccessRequested = true;
+		}
+	}
+
+	if (surfaceAccessAllowed) {
+		winrt::Windows::Perception::Spatial::SpatialBoundingBox boundingBox{
+			{ 0.f,  0.f, 0.f },
+			{ 20.f, 20.f, 5.f },
+		};
+
+		winrt::Windows::Perception::Spatial::SpatialBoundingVolume boudingVolume = winrt::Windows::Perception::Spatial::SpatialBoundingVolume::FromBox(currentCoordinateSystem,boundingBox);
+
+		if (surfaceObserver == nullptr) {
+			//allocate?? how??
+			surfaceOptions = &winrt::Windows::Perception::Spatial::Surfaces::SpatialSurfaceMeshOptions();
+			IVectorView<DirectXPixelFormat> supportedVertexPositionFormats = surfaceOptions->SupportedVertexPositionFormats;
+			unsigned int formatIndex = 0;
+
+			if (supportedVertexPositionFormats.IndexOf(DirectXPixelFormat::R16G16B16A16IntNormalized, formatIndex))
+			{
+				surfaceOptions->VertexPositionFormat = DirectXPixelFormat::R16G16B16A16IntNormalized;
+			}
+			IVectorView<DirectXPixelFormat> supportedVertexNormalFormats = surfaceOptions->SupportedVertexNormalFormats;
+			if (supportedVertexNormalFormats.IndexOf(DirectXPixelFormat::R8G8B8A8IntNormalized, formatIndex))
+			{
+				surfaceOptions->VertexNormalFormat = DirectXPixelFormat::R8G8B8A8IntNormalized;
+			}
+
+		//create observer
+		}
+	}
+	//---
 
 #ifdef DRAW_SAMPLE_CONTENT
     if (m_stationaryReferenceFrame != nullptr)

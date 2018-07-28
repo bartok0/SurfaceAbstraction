@@ -4,6 +4,7 @@
   xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
   xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:uap2="http://schemas.microsoft.com/appx/manifest/uap/windows10/2"
   IgnorableNamespaces="uap mp">
 
   <Identity Name="71035949-0584-44ba-88c6-1b55ff04a77e"
@@ -12,6 +13,10 @@
 
   <mp:PhoneIdentity PhoneProductId="71035949-0584-44ba-88c6-1b55ff04a77e" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
+  <Capabilities>
+    <uap2:Capability Name="spatialPerception" />
+  </Capabilities>
+  
   <Properties>
     <DisplayName>SurfaceAbstraction</DisplayName>
     <PublisherDisplayName>Bartok</PublisherDisplayName>
