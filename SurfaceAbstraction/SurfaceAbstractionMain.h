@@ -104,7 +104,7 @@ namespace SurfaceAbstraction
         winrt::Windows::Perception::Spatial::SpatialLocator         m_spatialLocator = nullptr;
 
         // A stationary reference frame based on m_spatialLocator.
-        winrt::Windows::Perception::Spatial::SpatialStationaryFrameOfReference m_stationaryReferenceFrame = nullptr;
+        Windows::Perception::Spatial::SpatialStationaryFrameOfReference m_stationaryReferenceFrame = nullptr;
 
         // Event registration tokens.
         winrt::event_token                                          m_cameraAddedToken;
@@ -139,8 +139,8 @@ namespace SurfaceAbstraction
 		Abstraction												    absInterface;
 
 		//memebers for init/checking/doing vertex access
-		winrt::Windows::Perception::Spatial::Surfaces::SpatialSurfaceObserver*		surfaceObserver = nullptr;
-		winrt::Windows::Perception::Spatial::Surfaces::SpatialSurfaceMeshOptions*	surfaceOptions = nullptr;
+		Windows::Perception::Spatial::Surfaces::SpatialSurfaceObserver^		surfaceObserver = nullptr;
+		Windows::Perception::Spatial::Surfaces::SpatialSurfaceMeshOptions^	surfaceOptions = nullptr;
 
 		bool surfaceAccessAllowed;
 		bool surfaceAccessRequested;

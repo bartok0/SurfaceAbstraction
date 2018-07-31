@@ -15,6 +15,9 @@ using namespace winrt::Windows::Graphics::DirectX::Direct3D11;
 using namespace winrt::Windows::Perception::Spatial;
 using namespace winrt::Windows::UI::Input::Spatial;
 
+//DO DIS
+using namespace Windows::Perception::Spatial::Surfaces;
+
 //---
 using namespace winrt::Windows::Foundation::Collections;
 using namespace winrt::Windows::Graphics::DirectX;
@@ -152,7 +155,7 @@ HolographicFrame SurfaceAbstractionMain::Update()
     m_deviceResources->EnsureCameraResources(holographicFrame, prediction);
 
 	//---
-	winrt::Windows::Perception::Spatial::SpatialCoordinateSystem currentCoordinateSystem = m_stationaryReferenceFrame.CoordinateSystem();
+	Windows::Perception::Spatial::SpatialCoordinateSystem currentCoordinateSystem = m_stationaryReferenceFrame.CoordinateSystem();
 
 	//use tryasynccompute to get raw surface data and store in rawvertices
 	if (surfaceObserver == nullptr) {
@@ -174,18 +177,23 @@ HolographicFrame SurfaceAbstractionMain::Update()
 	}
 
 	if (surfaceAccessAllowed) {
-		winrt::Windows::Perception::Spatial::SpatialBoundingBox boundingBox{
+		Windows::Perception::Spatial::SpatialBoundingBox boundingBox{
 			{ 0.f,  0.f, 0.f },
 			{ 20.f, 20.f, 5.f },
 		};
 
-		winrt::Windows::Perception::Spatial::SpatialBoundingVolume boudingVolume = winrt::Windows::Perception::Spatial::SpatialBoundingVolume::FromBox(currentCoordinateSystem,boundingBox);
+		Windows::Perception::Spatial::SpatialBoundingVolume^ boudingVolume = Windows::Perception::Spatial::SpatialBoundingVolume::FromBox(currentCoordinateSystem,boundingBox);
 
 		if (surfaceObserver == nullptr) {
+
+			//allocation tests
+			//Windows::Perception::Spatial::Surfaces::SpatialSurfaceMeshOptions^ ptr = ref new Windows::Perception::Spatial::Surfaces::SpatialSurfaceMeshOptions();
+			//winrt::Windows::Perception::Spatial::Surfaces::SpatialSurfaceMeshOptions^ ptr = ref new winrt::Windows::Perception::Spatial::Surfaces::SpatialSurfaceMeshOptions();
+
 			//allocate?? how??
-			surfaceOptions = &winrt::Windows::Perception::Spatial::Surfaces::SpatialSurfaceMeshOptions();
+			surfaceOptions = ref new Windows::Perception::Spatial::Surfaces::SpatialSurfaceMeshOptions();
 			IVectorView<DirectXPixelFormat> supportedVertexPositionFormats = surfaceOptions->SupportedVertexPositionFormats;
-			unsigned int formatIndex = 0;
+			unsigned int formatIndex = 0; 
 
 			if (supportedVertexPositionFormats.IndexOf(DirectXPixelFormat::R16G16B16A16IntNormalized, formatIndex))
 			{
